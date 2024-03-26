@@ -1,19 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.2a786878.css",
-    "main.js": "/static/js/main.7eed2fd5.js",
+    "main.css": "/static/css/main.2a1e1062.css",
+    "main.js": "/static/js/main.b5c4672e.js",
     "static/js/453.a1619f72.chunk.js": "/static/js/453.a1619f72.chunk.js",
-    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
-    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
-    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
-    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "static/media/numbers-phone.jpg": "/static/media/numbers-phone.ae3cc490da42ad173b36.jpg",
+    "static/media/numbers.jpg": "/static/media/numbers.f4179848f7e24173db0c.jpg",
+    "static/media/Tata-capital.png": "/static/media/Tata-capital.a200b128d7e23427d060.png",
     "index.html": "/index.html",
-    "main.2a786878.css.map": "/static/css/main.2a786878.css.map",
-    "main.7eed2fd5.js.map": "/static/js/main.7eed2fd5.js.map",
+    "main.2a1e1062.css.map": "/static/css/main.2a1e1062.css.map",
+    "main.b5c4672e.js.map": "/static/js/main.b5c4672e.js.map",
     "453.a1619f72.chunk.js.map": "/static/js/453.a1619f72.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2a786878.css",
-    "static/js/main.7eed2fd5.js"
+    "static/css/main.2a1e1062.css",
+    "static/js/main.b5c4672e.js"
   ]
 }
