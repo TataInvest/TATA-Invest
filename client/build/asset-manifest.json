@@ -1,9 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.eb306477.css",
-    "main.js": "/static/js/main.f1bcf4f0.js",
+    "main.css": "/static/css/main.ff7b6a3c.css",
+    "main.js": "/static/js/main.03b39fce.js",
     "static/js/453.a1619f72.chunk.js": "/static/js/453.a1619f72.chunk.js",
+    "static/media/lending-partners.png": "/static/media/lending-partners.28f48e5d023908b07a96.png",
     "static/media/numbers.png": "/static/media/numbers.f57aea784fbddb266272.png",
+    "static/media/lending-partners-mobile.png": "/static/media/lending-partners-mobile.5682ba16164b2ce87fc2.png",
     "static/media/numbers-mobile.png": "/static/media/numbers-mobile.51b4d3df77f7d35caf69.png",
     "static/media/Tata-capital.png": "/static/media/Tata-capital.a200b128d7e23427d060.png",
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
@@ -11,12 +13,12 @@
     "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
-    "main.eb306477.css.map": "/static/css/main.eb306477.css.map",
-    "main.f1bcf4f0.js.map": "/static/js/main.f1bcf4f0.js.map",
+    "main.ff7b6a3c.css.map": "/static/css/main.ff7b6a3c.css.map",
+    "main.03b39fce.js.map": "/static/js/main.03b39fce.js.map",
     "453.a1619f72.chunk.js.map": "/static/js/453.a1619f72.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.eb306477.css",
-    "static/js/main.f1bcf4f0.js"
+    "static/css/main.ff7b6a3c.css",
+    "static/js/main.03b39fce.js"
   ]
 }
