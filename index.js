@@ -7,10 +7,12 @@ import morgan from 'morgan';
 import parentReferralRoutes from './routes/parentReferralRoutes.js';
 import dotenv from 'dotenv';
 import path from 'path';
+// import getAllUsersRoutes from './routes/getAllUsersRoutes.js';
+
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-
+ 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -40,14 +42,14 @@ admin.initializeApp({
 });
 
 const firestore = admin.firestore();
-
+const usersRef = firestore.collection('users');
+const usersSnapshot = await usersRef.get();
 // Daily update task (using async/await)
 async function updateInterestAmounts() {
   const batch = firestore.batch();
 
   try {
-      const usersRef = firestore.collection('users');
-      const usersSnapshot = await usersRef.get();
+   
 
       for (const doc of usersSnapshot.docs) {
           const userData = doc.data();
@@ -161,6 +163,13 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api", parentReferralRoutes);
+
+app.get("/api/getAllUsers", async (req, res) => {
+  const usersRef = firestore.collection('users');
+  const snapshot = await usersRef.get();
+  const users = snapshot.docs.map(doc => doc.data());
+  res.json(users);
+});
 
 // Serve static assets in production
 app.use(express.static(path.join(__dirname,"./client/build")));
