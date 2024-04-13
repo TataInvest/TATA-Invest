@@ -3,7 +3,7 @@ import { updateParentReferralArray } from "../controller/parentReferralControlle
 
 
 //router object
-const router = express.Router(); 
+const router = express.Router();  
 
 // GET ALL USERS || GET
 router.get("/parentReferralUpdate/:id", updateParentReferralArray);

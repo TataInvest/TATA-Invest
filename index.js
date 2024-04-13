@@ -7,7 +7,8 @@ import morgan from 'morgan';
 import parentReferralRoutes from './routes/parentReferralRoutes.js';
 import dotenv from 'dotenv';
 import path from 'path';
-// import getAllUsersRoutes from './routes/getAllUsersRoutes.js';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from './config/config.js';
 
 
 import { fileURLToPath } from 'url';
@@ -146,8 +147,6 @@ async function updateInvestedAmount() {
 }
 
 
-
-
 // Schedule update using cron library (replace with your chosen scheduler)
 // Use a suitable scheduler library for production
 const task = cron.schedule('0 0 * * *', updateInterestAmounts); // Runs at midnight daily (for testing)
@@ -170,6 +169,26 @@ app.get("/api/getAllUsers", async (req, res) => {
   const users = snapshot.docs.map(doc => doc.data());
   res.json(users);
 });
+app.get("/api/getUserDetails/:userId", async (req, res) => {
+  try {
+      const userId = req.params.userId;
+      console.log("single user id", userId);
+      const userRef = doc(db, 'users', userId);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const userData = userSnap.data();
+      res.status(200).json({ user: userData, message: "User details fetched successfully" });
+  } catch (error) {
+      console.error("Error fetching user details:", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 app.get("/api/getAllPaymentRequests", async (req, res) => {
   try {
     const usersRef = firestore.collection('paymentApprovalRequests');
@@ -197,30 +216,40 @@ app.get("/api/getAllWithdrawalRequests", async (req, res) => {
   }
 });
 
-app.get("/api/sendotp", async (req, res) => {
+
+
+
+app.get('/api/sendotp/:id', async (req, res) => {
   try {
-    // const apiKey = 'pqAUHY3WhXsfNOiPJatdueV5mF9EgKMGn6Z4bQLlvTwc28Rz7o4HnrQXxZtM5PhYsTfj83GIaJKAvBFC'; // Replace 'YOUR_API_KEY' with your Fast2SMS API key
-    // const smsData = {
-    //   sender_id: 'FSTSMS',
-    //   message: 'This is your OTP',
-    //   language: 'english',
-    //   route: 'q',
-    //   numbers: '8927023672' // Replace with the recipient's phone number
-    // };
+    const id = req.params.id;
+    const phoneNumber = Number(id.slice(0, 10));
+    const otpNumber = id.slice(10);
 
-    // const response = await fetch('https://www.fast2sms.com/dev/bulkV2', {
-    //   method: 'POST',
-    //   headers: {
-    //     'authorization': `${apiKey}`, // Update header key to 'Authorization' and add 'Bearer' prefix
-    //     'Content-Type': 'application/json' // Set content type to 'application/json'
-    //   },
-    //   body: JSON.stringify(smsData) // Convert smsData to JSON string
-    // });
+    const apiKey = process.env.FAST2SMS_API_KEY; // Replace 'YOUR_API_KEY' with your Fast2SMS API key
+    const smsData = {
+      // sender_id: 'FSTSMS',
+      // message: 'This is your OTP',
+      variables_values: otpNumber,
+      // language: 'english',
+      route: 'otp',
+      numbers: phoneNumber // Replace with the recipient's phone number
+    };
 
-    // const responseData = await response.json();
-    // console.log('OTP sent successfully:', responseData);
-    res.status(200).json({'aman':'kumar'}); // Send response data back to client
-  } catch (error) {
+    const response = await fetch('https://www.fast2sms.com/dev/bulkV2', {
+      method: 'POST',
+      headers: {
+        'authorization': `${apiKey}`, // Update header key to 'Authorization' and add 'Bearer' prefix
+        'Content-Type': 'application/json' // Set content type to 'application/json'
+      },
+      body: JSON.stringify(smsData) // Convert smsData to JSON string
+    });
+
+    const responseData = await response.json();
+    console.log('Response data', responseData.data);
+    res.status(200).json(responseData);
+    
+    // res.status(200).json({"phoneNumber:": phoneNumber , "OTP:": otpNumber}); // Send response data back to client
+    } catch (error) {
     console.error('Error sending OTP:', error);
     res.status(500).json({ error: 'Failed to send OTP' }); // Send error response
   }
