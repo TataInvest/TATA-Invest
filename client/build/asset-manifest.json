@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.b2f4ae3a.css",
-    "main.js": "/static/js/main.5a88bad7.js",
+    "main.js": "/static/js/main.f8da4470.js",
     "static/js/453.a1619f72.chunk.js": "/static/js/453.a1619f72.chunk.js",
     "static/media/Tata-capital.png": "/static/media/Tata-capital.a200b128d7e23427d060.png",
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
@@ -10,11 +10,11 @@
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
     "main.b2f4ae3a.css.map": "/static/css/main.b2f4ae3a.css.map",
-    "main.5a88bad7.js.map": "/static/js/main.5a88bad7.js.map",
+    "main.f8da4470.js.map": "/static/js/main.f8da4470.js.map",
     "453.a1619f72.chunk.js.map": "/static/js/453.a1619f72.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b2f4ae3a.css",
-    "static/js/main.5a88bad7.js"
+    "static/js/main.f8da4470.js"
   ]
 }
