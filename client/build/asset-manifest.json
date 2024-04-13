@@ -1,20 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.b2f4ae3a.css",
-    "main.js": "/static/js/main.e447a1d0.js",
+    "main.css": "/static/css/main.509d5ae5.css",
+    "main.js": "/static/js/main.19aca8d1.js",
     "static/js/453.a1619f72.chunk.js": "/static/js/453.a1619f72.chunk.js",
     "static/media/Tata-capital.png": "/static/media/Tata-capital.a200b128d7e23427d060.png",
+    "static/media/referralImg.jpg": "/static/media/referralImg.8d3508e9636b1cd351da.jpg",
     "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
     "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
-    "main.b2f4ae3a.css.map": "/static/css/main.b2f4ae3a.css.map",
-    "main.e447a1d0.js.map": "/static/js/main.e447a1d0.js.map",
+    "main.509d5ae5.css.map": "/static/css/main.509d5ae5.css.map",
+    "main.19aca8d1.js.map": "/static/js/main.19aca8d1.js.map",
     "453.a1619f72.chunk.js.map": "/static/js/453.a1619f72.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b2f4ae3a.css",
-    "static/js/main.e447a1d0.js"
+    "static/css/main.509d5ae5.css",
+    "static/js/main.19aca8d1.js"
   ]
 }
