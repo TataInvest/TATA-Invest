@@ -43,12 +43,12 @@ admin.initializeApp({
 });
 
 const firestore = admin.firestore();
-const usersRef = firestore.collection('users');
-const usersSnapshot = await usersRef.get();
+
 // Daily update task (using async/await)
 async function updateInterestAmounts() {
   const batch = firestore.batch();
-
+  const usersRef = firestore.collection('users');
+  const usersSnapshot = await usersRef.get();
   try {
    
 
@@ -98,7 +98,6 @@ async function updateInterestAmounts() {
 
 async function updateInvestedAmount() {
   try {
-    // Get all users from the database
     const usersSnapshot = await firestore.collection('users').get();
 
     // Iterate through each user
@@ -149,8 +148,8 @@ async function updateInvestedAmount() {
 
 // Schedule update using cron library (replace with your chosen scheduler)
 // Use a suitable scheduler library for production
-const task = cron.schedule('0 0 * * *', updateInterestAmounts); // Runs at midnight daily (for testing)
-const task_2 = cron.schedule('0 0 */7 * *', updateInvestedAmount);
+const task = cron.schedule('* * * * *', updateInterestAmounts);
+const task_2 = cron.schedule('* * * * *', updateInvestedAmount);
 
 // Optional: Start the scheduled task immediately for testing purposes (comment out for production)
 task.start();
