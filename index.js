@@ -146,10 +146,8 @@ async function updateInvestedAmount() {
 }
 
 
-// Schedule update using cron library (replace with your chosen scheduler)
-// Use a suitable scheduler library for production
-const task = cron.schedule('* * * * *', updateInterestAmounts);
-const task_2 = cron.schedule('* * * * *', updateInvestedAmount);
+const task = cron.schedule('0 0 * * *', updateInterestAmounts); 
+const task_2 = cron.schedule('0 0 */7 * *', updateInvestedAmount);
 
 // Optional: Start the scheduled task immediately for testing purposes (comment out for production)
 task.start();
