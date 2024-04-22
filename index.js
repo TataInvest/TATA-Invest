@@ -7,12 +7,13 @@ import morgan from 'morgan';
 import parentReferralRoutes from './routes/parentReferralRoutes.js';
 import dotenv from 'dotenv';
 import path from 'path';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from './config/config.js';
 
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { log } from 'console';
  
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -146,7 +147,9 @@ async function updateInvestedAmount() {
 }
 
 
-const task = cron.schedule('0 0 * * *', updateInterestAmounts); 
+// Schedule update using cron library (replace with your chosen scheduler)
+// Use a suitable scheduler library for production
+const task = cron.schedule('0 0 * * *', updateInterestAmounts); // Runs at midnight daily (for testing)
 const task_2 = cron.schedule('0 0 */7 * *', updateInvestedAmount);
 
 // Optional: Start the scheduled task immediately for testing purposes (comment out for production)
@@ -158,7 +161,78 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use("/api", parentReferralRoutes);
+// app.use("/api", parentReferralRoutes);
+app.get("/api/parentReferralUpdate/:id", async (req, res) => {
+  console.log("Entered Server");
+  const childrenId = req.params.id;
+
+  try {
+    console.log("Children ID in try block: ", childrenId);
+    const childRef = await getDoc(doc(db, 'users', childrenId));
+
+    if (!childRef.exists()) {
+      return res.status(404).send({
+        success: false,
+        message: "Child not found",
+      });
+    }
+
+    const childData = childRef.data();
+    const parentReferralCode = childData.parentReferralCode;
+    console.log("Parent Referral Code in try block: ", parentReferralCode);
+
+    console.log("Parent Referral Code in try block: ", parentReferralCode);
+    const parentRef = doc(db, 'users', parentReferralCode);
+    const parentRefGet = await getDoc(parentRef);
+
+    if (parentRefGet.exists()) {
+      const parentData = parentRefGet.data();
+      const referralUsersArray = parentData.referralUsers || [];
+
+      // Check if the child is already in the referral users array
+      if (!referralUsersArray.includes(childrenId)) {
+        referralUsersArray.push(childrenId);
+        // Update the parent document in Firestore with the updated referral users array
+        await parentRef.update({
+          referralUsers: referralUsersArray
+        });
+      }
+
+      const dummyData = {
+        name: "John Doe",
+        email: "tata.com",
+        // nameNew: parentData.name
+      };
+
+      return res.status(200).send({
+        success: true,
+        message: "Demo message",
+        dummyData
+      });
+    } else {
+      return res.status(404).send({
+        success: false,
+        message: "Parent not found",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    // Check if the error is due to permission denied
+    if (error.code === 'permission-denied') {
+      return res.status(403).send({
+        success: false,
+        message: "Permission denied to access Firestore"
+      });
+    } else {
+      return res.status(500).send({
+        success: false,
+        message: "Error updating referral array",
+        error: error.message // Include the error message for debugging purposes
+      });
+    }
+  }
+});
+
 
 app.get("/api/getAllUsers", async (req, res) => {
   const usersRef = firestore.collection('users');

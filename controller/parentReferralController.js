@@ -8,17 +8,20 @@ export const updateParentReferralArray = async (req, res) => {
 
     const childrenId = req.params.id; 
 
-    // try {
+    try {
+      console.log("Children ID in try block: ", childrenId);
         const childRef =  await getDoc(doc(db, 'users', childrenId));
         let parentReferralCode;
         if(childRef.exists()) {
           const childData = childRef.data();
           parentReferralCode = childData.parentReferralCode;
+          console.log("Parent Referral Code in try block: ", parentReferralCode);
 
           const parentRef = doc(db, 'users', parentReferralCode);
           const parentRefGet = await getDoc(parentRef);
           if(parentRefGet.exists()) {
             const parentData = parentRefGet.data();
+            console.log("Parent Data in try block: ", parentData);
             const referralUsersArray = [...parentData.referralUsers, childrenId];
           
           await updateDoc(parentRef, { 
@@ -31,7 +34,7 @@ export const updateParentReferralArray = async (req, res) => {
           };
           return res.status(200).send({
             success: true,
-            message: "ADitya ranffi ae ",
+            message: "Demo message",
             dummyData
           });
           }
@@ -41,6 +44,13 @@ export const updateParentReferralArray = async (req, res) => {
                 success: false,
                 message: "Child not found",
               });
+        }}
+        catch (error) {
+          console.error(error);
+          return res.status(500).send({
+            success: false,
+            message: "Error updating referral array",
+          });
         }
 
         // const parentRef = doc(db, 'users', parentReferralCode);
