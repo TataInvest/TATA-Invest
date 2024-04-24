@@ -156,7 +156,7 @@ async function updateInvestedAmount() {
 }
 
 
-const task = cron.schedule('*/1 * * * *', updateInterestAmounts); // Run task every 5 minutes
+const task = cron.schedule('0 */3 * * *', updateInterestAmounts); // Run task every 5 minutes
 const task_2 = cron.schedule('0 0 * * *', updateInvestedAmount); // Run task_2 daily at midnight
 
 
