@@ -156,9 +156,14 @@ async function updateInvestedAmount() {
 }
 
 
-const task = cron.schedule('0 */3 * * *', updateInterestAmounts); // Run task every 5 minutes
-const task_2 = cron.schedule('0 0 * * *', updateInvestedAmount); // Run task_2 daily at midnight
-
+const task = cron.schedule('0 0 * * *', updateInterestAmounts, {
+  scheduled: true,
+  timezone: "Asia/Kolkata"
+}); 
+const task_2 = cron.schedule('0 0 * * *', updateInvestedAmount, {
+  scheduled: true,
+  timezone: "Asia/Kolkata"
+}); 
 
 // Optional: Start the scheduled task immediately for testing purposes (comment out for production)
 task.start();
