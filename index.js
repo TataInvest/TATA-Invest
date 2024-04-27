@@ -165,9 +165,25 @@ const task_2 = cron.schedule('0 0 * * *', updateInvestedAmount, {
   timezone: "Asia/Kolkata"
 }); 
 
+
 // Optional: Start the scheduled task immediately for testing purposes (comment out for production)
 task.start();
 task_2.start();
+
+const cronJobs = [task, task_2];
+
+// Function to check and restart cron jobs if necessary
+const monitorCronJobs = () => {
+  for (const job of cronJobs) {
+    if (!job.running) {
+      job.start();
+      console.log(`Cron job ${job.name} restarted.`);
+    }
+  }
+};
+
+// Start the monitoring loop
+setInterval(monitorCronJobs, 60000); // Check every minute (adjust as needed)
 
 
 app.use(cors());
