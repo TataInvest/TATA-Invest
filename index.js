@@ -9,11 +9,10 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from './config/config.js';
-
-
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { log } from 'console';
+import { CronJob } from 'cron';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -156,14 +155,18 @@ async function updateInvestedAmount() {
 }
 
 
-const task = cron.schedule('0 0 * * *', updateInterestAmounts, {
-  scheduled: true,
-  timezone: "Asia/Kolkata"
-}); 
-const task_2 = cron.schedule('0 0 * * *', updateInvestedAmount, {
-  scheduled: true,
-  timezone: "Asia/Kolkata"
-}); 
+// const task = cron.schedule('0 0 * * *', updateInterestAmounts, {
+//   scheduled: true,
+//   timezone: "Asia/Kolkata"
+// }); 
+// const task_2 = cron.schedule('0 0 * * *', updateInvestedAmount, {
+//   scheduled: true,
+//   timezone: "Asia/Kolkata"
+// }); 
+
+const task = new CronJob('30 0 * * *', updateInterestAmounts, null, true, 'Asia/Kolkata');
+
+const task_2 = new CronJob('35 0 * * *', updateInvestedAmount, null, true, 'Asia/Kolkata');
 
 
 // Optional: Start the scheduled task immediately for testing purposes (comment out for production)
@@ -177,13 +180,13 @@ const monitorCronJobs = () => {
   for (const job of cronJobs) {
     if (!job.running) {
       job.start();
-      console.log(`Cron job ${job.name} restarted.`);
+      console.log(`Cron job restarted.`);
     }
   }
 };
 
 // Start the monitoring loop
-setInterval(monitorCronJobs, 60000); // Check every minute (adjust as needed)
+setInterval(monitorCronJobs, 6000000); // Check every 100 minute (adjust as needed)
 
 
 app.use(cors());
