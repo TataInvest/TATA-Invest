@@ -13,6 +13,9 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { log } from 'console';
 import { CronJob } from 'cron';
+import formData from 'form-data';
+import Mailgun from 'mailgun.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -43,6 +46,16 @@ admin.initializeApp({
 });
 
 const firestore = admin.firestore();
+
+
+// Replace these with your Mailjet API credentials
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({
+  username: 'api',
+  key: process.env.MAILGUN_API_KEY,
+  public_key: process.env.MAILGUN_PUBLIC_KEY
+});
+
 
 // Daily update task (using async/await)
 async function updateInterestAmounts() {
@@ -357,6 +370,263 @@ app.get('/api/sendotp/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to send OTP' }); // Send error response
   }
 });
+
+// Route to send email
+app.get('/api/send-email-kyc/:id', async (req, res) => {
+  try {
+    const userEmail = req.params.id;
+
+    mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: 'amankumar76814@gmail.com',
+        subject: `KYC DONE!!!`,
+        html: `<h3>Dear user,</h3><p>We are writing to inform you that your Know Your Customer (KYC) process has been successfully completed. As a result, you now have authorization to withdraw funds from your account. You may proceed with any necessary fund withdrawals at your convenience. For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p><p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p><p>Regards,</p><p>Tata Invest Team</p>`,
+      })
+      .then(msg => console.log(msg)) //success
+      .catch(err => console.log(err)); //fail;
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+// Route to send email
+app.post('/send-email-withdrawal', async (req, res) => {
+  try {
+    const { email, withdrawalAmount, accountNumber, ifscCode, name } = req.body;
+    const emailContent = `
+      <p>Hi ${name},</p>
+      <p>Your withdrawal request has been sent successfully. Kepp checking your statement section for any furthur change in status. We will notify you as soon as you request has been accepted.</p>
+      <ul>
+        <li>Withdrawal Amount: ${withdrawalAmount}</li>
+        <li>Account Number: ${accountNumber}</li>
+        <li>IFSC Code: ${ifscCode}</li>
+        <li>Status : pending</li>
+      </ul>
+      <p>Thank you for using our services!</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>Regards,
+      </p>
+      <p>Tata Invest Team</p>
+      <
+    `;
+
+    mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: email,
+        subject: 'Withdrawal Approval Request Generated',
+        html: emailContent
+      })
+      .then(msg => {
+        console.log(msg); // Success
+        res.status(200).json({ message: 'Email sent successfully' });
+      })
+      .catch(err => {
+        console.error('Error sending email:', err);
+        res.status(500).json({ error: 'Failed to send email' });
+      });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+app.post('/send-email-withdrawal-accepted', async (req, res) => {
+  try {
+    const { email, withdrawalAmount, name } = req.body;
+    const emailContent = `
+      <p>Hi ${name},</p>
+      <p>Your withdrawal request has been accepted. You can go ahead abd verify your withdrawal balance and entered amount.</p>
+      <ul>
+        <li>Withdrawal Amount: ${withdrawalAmount}</li>
+        <li>Status : <span style={{color:'green'}}>accepted</span></li>
+      </ul>
+      <p>Thank you for using our services!</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>Regards,
+      </p>
+      <p>Tata Invest Team</p>
+      <
+    `;
+
+    mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: email,
+        subject: 'Withdrawal Request Processed',
+        html: emailContent
+      })
+      .then(msg => {
+        console.log(msg); // Success
+        res.status(200).json({ message: 'Email sent successfully' });
+      })
+      .catch(err => {
+        console.error('Error sending email:', err);
+        res.status(500).json({ error: 'Failed to send email' });
+      });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+app.post('/send-email-withdrawal-rejected', async (req, res) => {
+  try {
+    const { email, withdrawalAmount, name } = req.body;
+    const emailContent = `
+      <p>Hi ${name},</p>
+      <p>Your withdrawal request has been rejected. If you find any discrepency you can go ahead put another request and if it persists contact us through our support email.</p>
+      <ul>
+        <li>Withdrawal Amount: ${withdrawalAmount}</li>
+        <li>Status : <span style={{color:'red'}}>rejected</span></li>
+      </ul>
+      <p>Thank you for using our services!</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>Regards,
+      </p>
+      <p>Tata Invest Team</p>
+      <
+    `;
+
+    mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: email,
+        subject: 'Withdrawal Request Rejected',
+        html: emailContent
+      })
+      .then(msg => {
+        console.log(msg); // Success
+        res.status(200).json({ message: 'Email sent successfully' });
+      })
+      .catch(err => {
+        console.error('Error sending email:', err);
+        res.status(500).json({ error: 'Failed to send email' });
+      });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+app.post('/send-email-addmoney', async (req, res) => {
+  try {
+    const { email, paidAmount, utrNumber, name } = req.body;
+    const emailContent = `
+      <p>Hi ${name},</p>
+      <p>Your payment approval request has been sent successfully. Keep checking your statement section for any furthur change in status. We will notify you as soon as you request has been accepted.</p>
+      <ul>
+        <li>Paid Amount: ${paidAmount}</li>
+        <li>UTR Number: ${utrNumber}</li>
+        <li>Status : pending</li>
+      </ul>
+      <p>Thank you for using our services!</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>Regards,
+      </p>
+      <p>Tata Invest Team</p>
+      <
+    `;
+
+    mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: email,
+        subject: 'Payment Approval Request Generated',
+        html: emailContent
+      })
+      .then(msg => {
+        console.log(msg); // Success
+        res.status(200).json({ message: 'Email sent successfully' });
+      })
+      .catch(err => {
+        console.error('Error sending email:', err);
+        res.status(500).json({ error: 'Failed to send email' });
+      });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+app.post('/send-email-addmoney-accepted', async (req, res) => {
+  try {
+    const { email, paidAmount, name, investedAmount } = req.body;
+    const emailContent = `
+      <p>Hi ${name},</p>
+      <p>Your payment approval request has been accepted. You can go ahead abd verify your account balance.</p>
+      <ul>
+        <li>Paid Amount: ${paidAmount}</li>
+        <li>Status : <span style={{color:'green'}}>accepted</span></li>
+        <li> Invested Amount : ${investedAmount} (as of now)</li>
+      </ul>
+      <p>Thank you for using our services!</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>Regards,
+      </p>
+      <p>Tata Invest Team</p>
+      <
+    `;
+
+    mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: email,
+        subject: 'Payment Approval Request Accepted',
+        html: emailContent
+      })
+      .then(msg => {
+        console.log(msg); // Success
+        res.status(200).json({ message: 'Email sent successfully' });
+      })
+      .catch(err => {
+        console.error('Error sending email:', err);
+        res.status(500).json({ error: 'Failed to send email' });
+      });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+app.post('/send-email-addmoney-rejected', async (req, res) => {
+  try {
+    const { email, paidAmount, name, investedAmount } = req.body;
+    const emailContent = `
+      <p>Hi ${name},</p>
+      <p>Your payment approval request has been rejected. If you find any discrepency you can go ahead put another request and if it persists contact us through our support email.</p>
+      <ul>
+        <li>Paid Amount: ${paidAmount}</li>
+        <li>Status : <span style={{color:'red'}}>rejected</span></li>
+        <li> Invested Amount : ${investedAmount} (as of now)</li>
+      </ul>
+      <p>Thank you for using our services!</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>Regards,
+      </p>
+      <p>Tata Invest Team</p>
+      <
+    `;
+
+    mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: email,
+        subject: 'Payment Approval Request Rejected',
+        html: emailContent
+      })
+      .then(msg => {
+        console.log(msg); // Success
+        res.status(200).json({ message: 'Email sent successfully' });
+      })
+      .catch(err => {
+        console.error('Error sending email:', err);
+        res.status(500).json({ error: 'Failed to send email' });
+      });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
 // Serve static assets in production
 app.use(express.static(path.join(__dirname, "./client/build")));
 
