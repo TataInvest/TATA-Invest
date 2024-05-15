@@ -379,7 +379,7 @@ app.get('/api/send-email-kyc/:id', async (req, res) => {
     mg.messages
       .create('tatainvest.org', {
         from: 'relations@tatainvest.org',
-        to: 'amankumar76814@gmail.com',
+        to: userEmail,
         subject: `KYC DONE!!!`,
         html: `<h3>Dear user,</h3><p>We are writing to inform you that your Know Your Customer (KYC) process has been successfully completed. As a result, you now have authorization to withdraw funds from your account. You may proceed with any necessary fund withdrawals at your convenience. For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p><p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p><p>Regards,</p><p>Tata Invest Team</p>`,
       })
