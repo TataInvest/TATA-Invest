@@ -172,6 +172,20 @@ app.get("/api/getAllPaymentRequests", async (req, res) => {
     res.status(500).json({ error: 'Error fetching payment requests' });
   }
 });
+
+app.get("/api/getAllKYCRequests", async (req, res) => {
+  try {
+    const kycsRef = firestore.collection('KYCApprovalRequests');
+    const snapshot = await kycsRef.get();
+    const kycs = snapshot.docs.map(doc => {
+      return { id: doc.id, ...doc.data() }; // Include document ID in the response
+    });
+    res.json(kycs);
+  } catch (error) {
+    console.error('Error fetching KYC requests:', error);
+    res.status(500).json({ error: 'Error fetching KYC requests' });
+  }
+});
 app.get("/api/getAllWithdrawalRequests", async (req, res) => {
   try {
     const usersRef = firestore.collection('withdrawalApprovalRequests');
@@ -230,15 +244,70 @@ app.get('/api/send-email-kyc/:id', async (req, res) => {
   try {
     const userEmail = req.params.id;
 
-    mg.messages
+    await mg.messages
       .create('tatainvest.org', {
         from: 'relations@tatainvest.org',
         to: userEmail,
-        subject: `KYC DONE!!!`,
-        html: `<h3>Dear user,</h3><p>We are writing to inform you that your Know Your Customer (KYC) process has been successfully completed. As a result, you now have authorization to withdraw funds from your account. You may proceed with any necessary fund withdrawals at your convenience. For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p><p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p><p>Regards,</p><p>Tata Invest Team</p>`,
+        subject: 'KYC Request Sent!!!',
+        html: `<h3>Dear user,</h3>
+               <p>We are writing to inform you that your Know Your Customer (KYC) process has been sent to the admin for verification. We will let you know about it as soon as possible.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
+               <p>Regards,</p>
+               <p>Tata Invest Team</p>`,
       })
-      .then(msg => console.log(msg)) //success
-      .catch(err => console.log(err)); //fail;
+      .then(msg => console.log(msg)) // success
+      .catch(err => console.log(err)); // fail;
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+app.get('/api/send-email-kyc-accepted/:id', async (req, res) => {
+  try {
+    const userEmail = req.params.id;
+
+    await mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: userEmail,
+        subject: 'KYC Approval Accepted!!!',
+        html: `<h3>Dear user,</h3>
+               <p>We are writing to inform you that your Know Your Customer (KYC) process has been accepted successfully. As a result, you now have authorization to withdraw funds from your account at your own discretion.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
+               <p>Regards,</p>
+               <p>Tata Invest Team</p>`,
+      })
+      .then(msg => console.log(msg)) // success
+      .catch(err => console.log(err)); // fail;
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+app.get('/api/send-email-kyc-rejected/:id', async (req, res) => {
+  try {
+    const userEmail = req.params.id;
+
+    await mg.messages
+      .create('tatainvest.org', {
+        from: 'relations@tatainvest.org',
+        to: userEmail,
+        subject: 'KYC Request Rejected!!!',
+        html: `<h3>Dear user,</h3>
+               <p>We are writing to inform you that your Know Your Customer (KYC) request has been rejected due to some discrepancy in the submitted data such as PAN card, Aadhaar card, bank account details, etc.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
+               <p>Regards,</p>
+               <p>Tata Invest Team</p>`,
+      })
+      .then(msg => console.log(msg)) // success
+      .catch(err => console.log(err)); // fail;
     res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
