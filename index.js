@@ -21,7 +21,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 
-
 dotenv.config();
 
 const app = express();
@@ -246,15 +245,15 @@ app.get('/api/send-email-kyc/:id', async (req, res) => {
 
     await mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: userEmail,
         subject: 'KYC Request Sent!!!',
         html: `<h3>Dear user,</h3>
                <p>We are writing to inform you that your Know Your Customer (KYC) process has been sent to the admin for verification. We will let you know about it as soon as possible.</p>
-               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
                <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
                <p>Regards,</p>
-               <p>Tata Invest Team</p>`,
+               <p>Dual Invest Team</p>`,
       })
       .then(msg => console.log(msg)) // success
       .catch(err => console.log(err)); // fail;
@@ -271,15 +270,15 @@ app.get('/api/send-email-kyc-accepted/:id', async (req, res) => {
 
     await mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: userEmail,
         subject: 'KYC Approval Accepted!!!',
         html: `<h3>Dear user,</h3>
                <p>We are writing to inform you that your Know Your Customer (KYC) process has been accepted successfully. As a result, you now have authorization to withdraw funds from your account at your own discretion.</p>
-               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
                <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
                <p>Regards,</p>
-               <p>Tata Invest Team</p>`,
+               <p>Dual Invest Team</p>`,
       })
       .then(msg => console.log(msg)) // success
       .catch(err => console.log(err)); // fail;
@@ -296,15 +295,15 @@ app.get('/api/send-email-kyc-rejected/:id', async (req, res) => {
 
     await mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: userEmail,
         subject: 'KYC Request Rejected!!!',
         html: `<h3>Dear user,</h3>
                <p>We are writing to inform you that your Know Your Customer (KYC) request has been rejected due to some discrepancy in the submitted data such as PAN card, Aadhaar card, bank account details, etc.</p>
-               <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+               <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
                <p>Thank you for your cooperation during the KYC process. We value your trust and continued partnership.</p>
                <p>Regards,</p>
-               <p>Tata Invest Team</p>`,
+               <p>Dual Invest Team</p>`,
       })
       .then(msg => console.log(msg)) // success
       .catch(err => console.log(err)); // fail;
@@ -328,16 +327,16 @@ app.post('/send-email-withdrawal', async (req, res) => {
         <li>Status : pending</li>
       </ul>
       <p>Thank you for using our services!</p>
-      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
       <p>Regards,
       </p>
-      <p>Tata Invest Team</p>
+      <p>Dual Invest Team</p>
       <
     `;
 
     mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: email,
         subject: 'Withdrawal Approval Request Generated',
         html: emailContent
@@ -366,16 +365,16 @@ app.post('/send-email-withdrawal-accepted', async (req, res) => {
         <li>Status : <span style={{color:'green'}}>accepted</span></li>
       </ul>
       <p>Thank you for using our services!</p>
-      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
       <p>Regards,
       </p>
-      <p>Tata Invest Team</p>
+      <p>Dual Invest Team</p>
       <
     `;
 
     mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: email,
         subject: 'Withdrawal Request Processed',
         html: emailContent
@@ -404,16 +403,16 @@ app.post('/send-email-withdrawal-rejected', async (req, res) => {
         <li>Status : <span style={{color:'red'}}>rejected</span></li>
       </ul>
       <p>Thank you for using our services!</p>
-      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
       <p>Regards,
       </p>
-      <p>Tata Invest Team</p>
+      <p>Dual Invest Team</p>
       <
     `;
 
     mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: email,
         subject: 'Withdrawal Request Rejected',
         html: emailContent
@@ -444,16 +443,16 @@ app.post('/send-email-addmoney', async (req, res) => {
         <li>Status : pending</li>
       </ul>
       <p>Thank you for using our services!</p>
-      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
       <p>Regards,
       </p>
-      <p>Tata Invest Team</p>
+      <p>Dual Invest Team</p>
       <
     `;
 
     mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: email,
         subject: 'Payment Approval Request Generated',
         html: emailContent
@@ -483,16 +482,16 @@ app.post('/send-email-addmoney-accepted', async (req, res) => {
         <li> Invested Amount : ${investedAmount} (as of now)</li>
       </ul>
       <p>Thank you for using our services!</p>
-      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
       <p>Regards,
       </p>
-      <p>Tata Invest Team</p>
+      <p>Dual Invest Team</p>
       <
     `;
 
     mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: email,
         subject: 'Payment Approval Request Accepted',
         html: emailContent
@@ -522,16 +521,16 @@ app.post('/send-email-addmoney-rejected', async (req, res) => {
         <li> Invested Amount : ${investedAmount} (as of now)</li>
       </ul>
       <p>Thank you for using our services!</p>
-      <p>For any inquiries or assistance, please contact our customer support team at relations@tatainvest.org.</p>
+      <p>For any inquiries or assistance, please contact our customer support team at relations@dualinvest.in.</p>
       <p>Regards,
       </p>
-      <p>Tata Invest Team</p>
+      <p>Dual Invest Team</p>
       <
     `;
 
     mg.messages
       .create('tatainvest.org', {
-        from: 'relations@tatainvest.org',
+        from: 'relations@dualinvest.in',
         to: email,
         subject: 'Payment Approval Request Rejected',
         html: emailContent
