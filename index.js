@@ -16,7 +16,6 @@ import { CronJob } from 'cron';
 import formData from 'form-data';
 import Mailgun from 'mailgun.js';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
